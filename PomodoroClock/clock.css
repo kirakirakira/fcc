@@ -1,0 +1,20 @@
+#pause-btn {
+  display:none;
+  float: left;
+}
+
+#start-btn {
+  float: left;
+}
+
+#stop-btn {
+  float: left;
+}
+
+#dec-work-btn {
+  float: left;
+}
+
+#inc-work-btn {
+  float: left;
+}

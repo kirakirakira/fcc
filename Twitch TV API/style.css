@@ -1,0 +1,16 @@
+
+
+#RobotCaleb {
+  float: left;
+  width: 125px;
+  text-align: right;
+  margin: 2px 10px;
+  display: inline;
+}
+
+#RobotCaleb_status {
+  float: left;
+  text-align: left;
+  margin: 2px 10px;
+  display: inline;
+}

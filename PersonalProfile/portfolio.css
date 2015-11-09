@@ -1,0 +1,16 @@
+.navbar-brand.topname {
+  color: #4B0082;
+}
+
+.nav.navbar-nav.navbar-right li a {
+  color: #4B0082;  
+}
+
+.jumbotron {
+  font-family: 'Indie Flower', cursive;
+}
+
+p {
+  font-family: 'ABeeZee', sans-serif;
+  font-size: 18px;
+}

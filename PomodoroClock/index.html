@@ -1,0 +1,58 @@
+<html>
+
+<head>
+    <title>Pomodoro Clock</title>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="clock.css">
+    <script src="pomoclock.js"></script>
+    
+</head>
+
+<body>
+
+  <div id="container-fluid">
+    <div class="row">
+      <div class="col-md-6">
+        <button type="button" class="btn btn-default btn-md" id="start-btn">
+          <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
+        </button>
+      </div>
+      <div class="col-md-6">
+        <button type="button" class="btn btn-default btn-md" id="pause-btn">
+          <span class="glyphicon glyphicon-pause" aria-hidden="true"></span>
+         </button>
+      </div>
+      <div class="col-md-6">
+        <div id="timeLeft">
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-4">
+        <button type="button" class="btn btn-default btn-md" id="dec-work-btn">
+          <span class="glyphicon glyphicon-minus" aria-hidden="true"></span> 60s
+        </button>
+      </div>
+      <div class="col-md-4">
+        <button type="button" class="btn btn-default btn-md" id="stop-btn">
+          <span class="glyphicon glyphicon-stop" aria-hidden="true"></span>
+        </button>
+      </div>
+      <div class="col-md-4">
+        <button type="button" class="btn btn-default btn-md" id="inc-work-btn">
+          <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> 60s
+        </button>
+      </div>
+    </div>
+
+  </div>
+</body>
+
+</html>

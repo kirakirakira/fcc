@@ -111,74 +111,20 @@ function check_win(board) {
 	/* did the given player win on the given board?
 	return which player won if it's a winning board, or false if neither won */
 	var winning = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
-	var x_indexes = getAllIndexes(board, 'x');
-	var o_indexes = getAllIndexes(board, 'o');
 
 	for (var i = 0; i < winning.length; i++) {
-		console.log("checking this one: ", winning[i]);
-		var x_yes = 0;
-		var o_yes = 0;
-		for (var j = 0; j < winning[i].length; j++) {
-
-			if (x_indexes.indexOf(winning[i][j]) !== -1) {
-				console.log("adding a yes ");
-				x_yes++;
-
-				if (x_yes === 3) {
-					return 'x';
-				}
-			}
-			
-			if (o_indexes.indexOf(winning[i][j]) !== -1) {
-				o_yes++;
-
-				if (o_yes === 3) {
-					return 'o';
-				}
-			}
+		if ((board[winning[i][0]] === board[winning[i][1]]) && (board[winning[i][0]] === board[winning[i][2]]) && (board[winning[i][0]] !== '')) {
+			var winner = board[winning[i][0]];
+			return winner;
 		}
 	}
-
-	console.log("x yeses ", x_yes);
-
-	if (x_yes === 3) {
-		return 'x';
-	}
 	
-	else if (o_yes === 3) {
-		return 'o';
-	}
-
-	else if (get_empty_squares(board).length === 0) {
+	if (get_empty_squares(board).length === 0) {
 		return 'draw';
 	}
 
-	else {
-		return false;
-	}
-}
-
-
-// def winner(board):
-//     """Determine the game winner."""
-//     WAYS_TO_WIN = ((0, 1, 2),
-//                    (3, 4, 5),
-//                    (6, 7, 8),
-//                    (0, 3, 6),
-//                    (1, 4, 7),
-//                    (2, 5, 8),
-//                    (0, 4, 8),
-//                    (2, 4, 6))
-    
-//     for row in WAYS_TO_WIN:
-//         if board[row[0]] == board[row[1]] == board[row[2]] != EMPTY:
-//             winner = board[row[0]]
-//             return winner
-
-//     if EMPTY not in board:
-//         return TIE
-
-//     return None
+	return false;
+};
 
 function mm_move(board, player) {
 	/* Make a move on the board.
@@ -320,6 +266,6 @@ function init_game() {
 
 }
 
-//init_game();
+init_game();
 
-console.log(check_win([ 'x', 'x', 'o', 'x', 'o', 'o', 'x', 'o', 'x' ]));
+//console.log(check_win([ 'x', 'x', 'o', 'o', 'o', 'o', 'x', 'o', 'x' ]));

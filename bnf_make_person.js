@@ -3,39 +3,29 @@ var Person = function(firstAndLast) {
   var first_name = firstAndLast.split(" ")[0];
   var last_name = firstAndLast.split(" ")[1];
   
-  function setFirstName(first) {
+  this.setFirstName = function(first) {
     first_name = first;
   }
-  
-  function getFirstName() {
+
+  this.getFirstName = function() {
     return first_name;
   }
   
-  function setLastName(last) {
+  this.setLastName = function(last) {
     last_name = last;
-  }
-  
-  function getLastName() {
+  } 
+
+  this.getLastName = function() {
     return last_name;
   }
-  
-  function setFullName(firstAndLast) {
+
+  this.setFullName = function(firstAndLast) {
     first_name = firstAndLast.split(" ")[0];
     last_name = firstAndLast.split(" ")[1];
   }
 
-  function getFullName() {
-    console.log(typeof first_name);
+  this.getFullName = function() {
     return first_name + ' ' + last_name;
-  }
-
-  return {
-    setFirstName: setFirstName,
-    getFirstName: getFirstName,
-    setLastName: setLastName,
-    getLastName: getLastName,
-    setFullName: setFullName,
-    getFullName: getFullName
   }
 
 };

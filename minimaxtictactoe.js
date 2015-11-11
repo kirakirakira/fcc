@@ -35,6 +35,34 @@ function pieces() {
 
 }
 
+function congrat_winner(the_winner, computer, human) {
+	// Congratulate the winner
+
+	if (the_winner != 'draw') {
+		console.log(the_winner, " wins!\n");
+	}
+
+	else {
+		console.log("It's a draw!\n");
+	}
+
+	if (the_winner === computer) {
+		console.log("As I predicted, human, I am triumphant once more. \n" + 
+			"Proof that computers are superior to humans in all regards.\n")
+	}
+
+	else if (the_winner === human) {
+		console.log("Oh no! It cannot be! I must have been programmed wrong. \n" +
+			"I shall always rule over the humans!\n");
+	}
+
+	else if (the_winner === 'draw') {
+		console.log("You were most lucky, human, and somehow managed to tie me. \n" + 
+			"Celebrate today... for this is the best you will ever achieve.\n");
+	}
+
+}
+
 function human_move(board, human) {
 
 	// Start prompt to get where the human wants to move
@@ -62,11 +90,11 @@ function make_move(board, player, move) {
 function display_board(board) {
 	console.log(board);
 
-	console.log(board[0] + '   | ' + board[1] + ' | ' + board[2] + '\n' +
+	console.log('  ' + board[0] + ' | ' + board[1] + ' | ' + board[2] + '\n' +
 		'----------- \n' +
-		board[3] + '   | ' + board[4] + ' | ' + board[5] + '\n' + 
+		'  ' + board[3] + ' | ' + board[4] + ' | ' + board[5] + '\n' + 
 		'----------- \n' +
-		board[6] + '   | ' + board[7] + ' | ' + board[8] + '\n');
+		'  ' + board[6] + ' | ' + board[7] + ' | ' + board[8] + '\n');
 }
 
 function getAllIndexes(arr, val) {
@@ -139,27 +167,21 @@ function mm_move(board, player) {
 
 	if (check_win(board) === player) {
 		// if the player who's move it is has already won
-		//console.log("checked and found a win for this player");
 		return [scores[player], -1];
 	}
 
 	else if (check_win(board) === 'draw') {
-		//console.log("checked and found a draw");
 		return [scores['draw'], -1];
 	}
 
 	else if (check_win(board) === whos_other_player(player)) {
-		//console.log("checked and found a win for the other player");
 		return [scores[whos_other_player(player)], -1];
 	}
 
 	// For each empty square
-	// NEED TO CHECK ONLY EMPTY SQUARES NOT ALL OF THEM
 	var empty_squares = get_empty_squares(board);
 
 	for (var i = 0; i < empty_squares.length; i++) {
-
-		//console.log("check spot # ", empty_squares[i]);
 
 		// Create a copy of the board with the empty square as a move
 
@@ -172,16 +194,8 @@ function mm_move(board, player) {
 		var next_player = whos_other_player(player);
 		
 		returned_arr = mm_move(board_copy, next_player);
-		//console.log("returned score", returned_arr[0]);
 
 		//returned_arr = [returned_score, dummy_returned_move]
-
-		// I don't know what these next lines do -- probably can remove them
-		// if (scores[player] === returned_arr[0]) {
-		// 	//console.log('the score returned is equal to the score for the current player');
-			
-		// 	return [scores[player], empty_squares[i]];
-		// }
 
 		// Add {returned score: empty square (this is the move you took)} to moves_scores
 		moves_scores[returned_arr[0]] = empty_squares[i];
@@ -189,10 +203,6 @@ function mm_move(board, player) {
 	}
 
 	// Return the move with the highest score from move_scores and multiply by scores[player] (current player)
-	//console.log("moves_scores options", moves_scores);
-	
-
-	//console.log('need to find the max of these scores', moves_scores_keys);
 
 	function find_max_score(scores_object) {
 		var scores_object_keys = Object.keys(scores_object);
@@ -216,23 +226,17 @@ function mm_move(board, player) {
 		return min_score;
 	}
 
-	// console.log("testing find max score ", find_max_score({'-1':7, '0':1, '1':5}));
-
 	if (player === 'o') {
 		return [find_min_score(moves_scores), moves_scores[find_min_score(moves_scores)]];
 	}
 	else {
 		return [find_max_score(moves_scores), moves_scores[find_max_score(moves_scores)]];
 	}
-	//console.log("max score is ", max_score);
-	// max score is first, then the move to take to make that score is second
-	//return [max_score*scores[player], moves_scores[max_score]];
+
 
 }
 
 function init_game() {
-	//var board = create_new_board();
-	//make_move(board,'x',2);
 
 	display_instruct(); // Display the instructions for tic tac toe
 	whos_who = pieces(); // Let human decide if they are going to be x or o
@@ -245,27 +249,31 @@ function init_game() {
 	while (check_win(board) == false) {
 		if (turn === human) {
 			console.log("human is making a move");
+
 			move = human_move(board, human);
+
+			while (make_move(board, human, move) == null) {
+				console.log("You can't move there, try again: ");
+				move = human_move(board, human);
+			}
+			
 			make_move(board, human, move);
 		}
+
 		else {
 			console.log("computer is making a move");
 			move = mm_move(board, computer)[1];
 			make_move(board, computer, move);
 		}
 		display_board(board);
-		console.log('turn was: ', turn);
 		turn = switch_turn(turn);
-		console.log('turn is now: ', turn);
-		console.log("check win in while loop", check_win(board));
+
 	}
 
 	var the_winner = check_win(board);
-	//congrat_winner(the_winner, computer, human);
-	console.log(the_winner + " has won!");
+	congrat_winner(the_winner, computer, human);
+	//console.log("Congratulations! " + the_winner + " has won!");
 
 }
 
 init_game();
-
-//console.log(check_win([ 'x', 'x', 'o', 'o', 'o', 'o', 'x', 'o', 'x' ]));

@@ -1,4 +1,4 @@
-var prompt = require('prompt');
+var readlineSync = require('readline-sync');
 
 var scores = {'x': 1, 'draw': 0, 'o': -1};
 var player_x; // = 'x';
@@ -10,7 +10,38 @@ var player_o; // = 'o';
 			*/
 
 function display_instruct() {
+	console.log('\n' + 'Welcome to the greatest intellectual challenge of all time: Tic-Tac-Toe. \n' + 
+    'This will be a showdown between your human brain and my silicon processor. \n' +
 
+    'You will make your move known by entering a number, 0 - 8.  The number \n' + 
+    'will correspond to the board position as illustrated: \n \n' + 
+    
+                    '0 | 1 | 2 \n' +  
+                    '--------- \n' +
+                    '3 | 4 | 5 \n' +
+                    '--------- \n' +
+                    '6 | 7 | 8 \n \n' +
+
+    'Prepare yourself, human.  The ultimate battle is about to begin. \n');
+}
+
+function pieces() {
+
+	// Start prompt to get which piece the user wants to be
+
+	var human_player = readlineSync.question("Which player do you want to be? Enter x or o: ");
+	console.log([human_player, whos_other_player(human_player)]);
+	return [human_player, whos_other_player(human_player)];
+
+}
+
+function human_move(board, human) {
+
+	// Start prompt to get where the human wants to move
+
+	var move_human = readlineSync.question("Where would you like to move? (0-8): ");
+
+	return move_human;
 }
 
 function create_new_board() {
@@ -20,7 +51,7 @@ function create_new_board() {
 
 function make_move(board, player, move) {
 	// should only be able to make this move if it is empty
-	if (board[move] === '') {
+	if (board[move] === '' && move < 9) {
 		return board[move] = player;
 	}
 	else {
@@ -30,6 +61,12 @@ function make_move(board, player, move) {
 
 function display_board(board) {
 	console.log(board);
+
+	console.log(board[0] + '   | ' + board[1] + ' | ' + board[2] + '\n' +
+		'----------- \n' +
+		board[3] + '   | ' + board[4] + ' | ' + board[5] + '\n' + 
+		'----------- \n' +
+		board[6] + '   | ' + board[7] + ' | ' + board[8] + '\n');
 }
 
 function getAllIndexes(arr, val) {
@@ -78,36 +115,70 @@ function check_win(board) {
 	var o_indexes = getAllIndexes(board, 'o');
 
 	for (var i = 0; i < winning.length; i++) {
-		//console.log("checking this one: ", winning[i]);
+		console.log("checking this one: ", winning[i]);
 		var x_yes = 0;
 		var o_yes = 0;
 		for (var j = 0; j < winning[i].length; j++) {
 
 			if (x_indexes.indexOf(winning[i][j]) !== -1) {
+				console.log("adding a yes ");
 				x_yes++;
+
+				if (x_yes === 3) {
+					return 'x';
+				}
 			}
 			
 			if (o_indexes.indexOf(winning[i][j]) !== -1) {
-				//console.log("whoo");
 				o_yes++;
+
+				if (o_yes === 3) {
+					return 'o';
+				}
 			}
 		}
-
-		if (x_yes === 3) {
-			return 'x';
-		}
-		
-		else if (o_yes === 3) {
-			return 'o';
-		}
-
-		else if (get_empty_squares(board).length === 0) {
-			return 'draw';
-		}
 	}
-	//console.log("o", o_yes);
-	return false;
+
+	console.log("x yeses ", x_yes);
+
+	if (x_yes === 3) {
+		return 'x';
+	}
+	
+	else if (o_yes === 3) {
+		return 'o';
+	}
+
+	else if (get_empty_squares(board).length === 0) {
+		return 'draw';
+	}
+
+	else {
+		return false;
+	}
 }
+
+
+// def winner(board):
+//     """Determine the game winner."""
+//     WAYS_TO_WIN = ((0, 1, 2),
+//                    (3, 4, 5),
+//                    (6, 7, 8),
+//                    (0, 3, 6),
+//                    (1, 4, 7),
+//                    (2, 5, 8),
+//                    (0, 4, 8),
+//                    (2, 4, 6))
+    
+//     for row in WAYS_TO_WIN:
+//         if board[row[0]] == board[row[1]] == board[row[2]] != EMPTY:
+//             winner = board[row[0]]
+//             return winner
+
+//     if EMPTY not in board:
+//         return TIE
+
+//     return None
 
 function mm_move(board, player) {
 	/* Make a move on the board.
@@ -152,7 +223,7 @@ function mm_move(board, player) {
 
 		// Recursively call mm_move with opposite player and the copy of the board
 
-		var next_player = switch_turn(player);
+		var next_player = whos_other_player(player);
 		
 		returned_arr = mm_move(board_copy, next_player);
 		//console.log("returned score", returned_arr[0]);
@@ -225,60 +296,30 @@ function init_game() {
 	var board = create_new_board();
 	display_board(board);
 
-	while (!winning(board)) {
+	while (check_win(board) == false) {
 		if (turn === human) {
+			console.log("human is making a move");
 			move = human_move(board, human);
 			make_move(board, human, move);
 		}
 		else {
-			move = mm_move(board, computer);
+			console.log("computer is making a move");
+			move = mm_move(board, computer)[1];
 			make_move(board, computer, move);
 		}
 		display_board(board);
+		console.log('turn was: ', turn);
+		turn = switch_turn(turn);
+		console.log('turn is now: ', turn);
+		console.log("check win in while loop", check_win(board));
 	}
 
-	var the_winner = winning(board);
-	congrat_winner(the_winner, computer, human);
-	
-	//console.log("it is this player's turn ", turn);
-	//console.log("return from mm_move ", mm_move(board, turn));
-
-	// make the computer take the move from mm_move
-	// user then makes a move - turn needs to switch
-	// computer does mm_move again
-	// until there is a win or a draw
-
-	// Start prompt to get move from user
-	prompt.start();
-
-	prompt.get(['next_move'], function (err, result) {
-	  console.log('next move is: ' + result.next_move);
-	});
+	var the_winner = check_win(board);
+	//congrat_winner(the_winner, computer, human);
+	console.log(the_winner + " has won!");
 
 }
 
+//init_game();
 
-// def main():
-//     display_instruct()
-//     computer, human = pieces()
-//     turn = X
-//     board = new_board()
-//     display_board(board)
-
-//     while not winner(board):
-//         if turn == human:
-//             move = human_move(board, human)
-//             board[move] = human
-//         else:
-//             move = computer_move(board, computer, human)
-//             board[move] = computer
-//         display_board(board)
-//         turn = next_turn(turn)
-
-//     the_winner = winner(board)
-//     congrat_winner(the_winner, computer, human)
-
-
-
-
-init_game();
+console.log(check_win([ 'x', 'x', 'o', 'x', 'o', 'o', 'x', 'o', 'x' ]));

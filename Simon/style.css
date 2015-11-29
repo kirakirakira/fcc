@@ -82,6 +82,7 @@ body {
     position: absolute;
     left: 100px;
     top: 110px;
+    border: 2px solid black;
 }
 
 #strict-button {
@@ -92,6 +93,7 @@ body {
     position: absolute;
     left: 150px;
     top: 110px;
+    border: 2px solid black;
 }
 
 #count-box {
@@ -101,7 +103,8 @@ body {
     border-radius: 5px;
     position: absolute;
     left: 15px;
-    top: 110px;    
+    top: 110px;
+    border: 2px solid black;
 }
 
 #on-off-toggle {
@@ -123,7 +126,7 @@ body {
 #count {
     position: absolute;
     left: 20px;
-    top: 140px;
+    top: 142px;
 }
 
 .labels {
@@ -138,13 +141,13 @@ body {
 #start {
     position: absolute;
     left: 95px;
-    top: 130px;
+    top: 132px;
 }
 
 #strict {
     position: absolute;
     left: 145px;
-    top: 130px;
+    top: 132px;
 }
 
 #ON {
@@ -157,4 +160,24 @@ body {
     position: absolute;
     left: 140px;
     top: 165px;
+}
+
+.toggle-button {
+    width: 26px;
+    height: 24px;
+    background-color: dodgerblue;
+    border-radius: 3px;
+}
+
+#ON-toggle {
+    visibility: hidden;
+    position: absolute;
+    left: 73px;
+    top: 173px;
+}
+
+#OFF-toggle {
+    position: absolute;
+    left: 102px;
+    top: 173px;
 }

@@ -26,6 +26,7 @@ body {
     border-color: darkslategray;
     float: left;
     display: inline-block;
+    z-index: 2;
 }
 
 .round-right-top {
@@ -72,6 +73,7 @@ body {
     color: white;
     font-family: 'Roboto Slab', serif;
     font-weight: 700;
+    position: absolute;
 }
 
 #start-button {
@@ -117,7 +119,7 @@ body {
     border-radius: 5px;
 }
 
-.UI {
+.control-UI {
     width: 200px;
     height: 200px;
     position: relative;

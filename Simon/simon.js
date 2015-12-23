@@ -66,7 +66,7 @@ $(document).ready(function() {
         game_start = true;
         $("#current-count").text(count);
         setting_timeouts();
-        setTimeout(check_presses, count*2000);
+        //setTimeout(check_presses, count*2000);
     })
          
     $("#OFF-toggle").click(function() {
@@ -110,6 +110,10 @@ $(document).ready(function() {
             setTimeout(reset_colors, 500);
             button_presses.push(0);
             console.log(button_presses);
+            
+            if (button_presses.length === count) {
+                setTimeout(check_presses,500);
+            }
         }
     });
      
@@ -119,6 +123,10 @@ $(document).ready(function() {
             setTimeout(reset_colors, 500);
             button_presses.push(1);
             console.log(button_presses);
+            
+            if (button_presses.length === count) {
+                setTimeout(check_presses,500);
+            }
         }
     });
     
@@ -128,6 +136,10 @@ $(document).ready(function() {
             setTimeout(reset_colors, 500);
             button_presses.push(2);
             console.log(button_presses);
+            
+            if (button_presses.length === count) {
+                setTimeout(check_presses,500);
+            }
         }
     });
     
@@ -137,6 +149,10 @@ $(document).ready(function() {
             setTimeout(reset_colors, 500);
             button_presses.push(3);
             console.log(button_presses);
+            
+            if (button_presses.length === count) {
+                setTimeout(check_presses,500);
+            }
         }
     });
     
@@ -206,30 +222,28 @@ $(document).ready(function() {
     
     function check_presses() {
         if (game_presses.length !== button_presses.length) {
-            alert("you lose");
+            console.log("you lose");
             keep_playing = false;
             return false;
         }
         for (var i = game_presses.length; i > 0; i--) {
             if (game_presses[i] !== button_presses[i]) {
-                alert("you lose");
+                console.log("you lose");
                 keep_playing = false;
                 return false;
             }
         }
         
-        alert("you win");
+        console.log("you win");
         // reset the player's button presses back to nothing
         button_presses = [];
         // increase count by 1, and add a new random color to the game press and then continue
+        reset_colors();
         count += 1;
         $("#current-count").text(count);
         game_presses.push(Math.floor((Math.random() * 4)));
-        reset_colors();
         // this replays the last sequence plus the new one once the player repeats it correctly
-        replay_timeouts();
-        // this goes and checks the presses again to see if they're still a winner
-        setTimeout(check_presses, count*3000);
+        setTimeout(replay_timeouts,500);
         return true;
     }
     

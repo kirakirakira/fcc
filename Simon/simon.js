@@ -70,6 +70,8 @@ $(document).ready(function() {
     })
     
     function start_the_game() {
+        game_presses = [];
+        button_presses = [];
         count = 1;
         $("#current-count").text(count);
         game_start = true;
@@ -79,10 +81,9 @@ $(document).ready(function() {
     $("#OFF-toggle").click(function() {
         $("#ON-toggle").css("visibility", "visible");
         $("#OFF-toggle").css("visibility", "hidden");
-        game_presses = [];
-        button_presses = [];
         device_status = true;
         console.log("it's on!");
+        $("#current-count").text("--");
         reset_colors();
     });
     
@@ -286,8 +287,6 @@ $(document).ready(function() {
         // once you reach 20 steps, you win the game! game will restart at count = 1
         if (count === 20) {
             alert("Congratulations! You've won the game!");
-            game_presses = [];
-            button_presses = [];
             reset_colors();
             start_the_game();
         }

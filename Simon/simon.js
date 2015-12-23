@@ -11,6 +11,8 @@ $(document).ready(function() {
     var sound_1 = new Audio("https://s3.amazonaws.com/freecodecamp/simonSound2.mp3");
     var sound_2 = new Audio("https://s3.amazonaws.com/freecodecamp/simonSound3.mp3");
     var sound_3 = new Audio("https://s3.amazonaws.com/freecodecamp/simonSound4.mp3");
+    var tempo = 500;
+    var tempo_1 = 1000;
     
     window.timeoutList = new Array();
     window.intervalList = new Array();
@@ -162,79 +164,126 @@ $(document).ready(function() {
             console.log(button_presses);
             
             if (button_presses.length === count) {
-                setTimeout(check_presses,500);
+                setTimeout(check_presses, 500);
             }
         }
     });
     
     
     function random_color() {
-        var random_color = Math.floor((Math.random() * 4));
-        console.log(random_color);
-        console.log(color_array[random_color]);
-        game_presses.push(random_color);
+        var new_color = Math.floor((Math.random() * 4));
+        console.log(new_color);
+        console.log(color_array[new_color]);
+        game_presses.push(new_color);
         console.log("game presses", game_presses);
         
-        switch (random_color) {
+        if (count >= 5 && count < 9) {
+            tempo = 450;
+        }
+        else if (count >= 9 && count < 13) {
+            tempo = 400;
+        }
+        else if (count >= 13) {
+            tempo = 300;
+        }
+        
+        switch (new_color) {
             case 0:
-                $(".round-left-top").css("background-color", "#b3ffb3");
                 sound_0.play();
-                setTimeout(reset_colors, 500);
+                $(".round-left-top").css("background-color", "#b3ffb3");
+                setTimeout(reset_colors, tempo);
                 break;
             case 1:
-                $(".round-left-bottom").css("background-color", "#ffffb3");
                 sound_1.play();
-                setTimeout(reset_colors, 500);
+                $(".round-left-bottom").css("background-color", "#ffffb3");
+                setTimeout(reset_colors, tempo);
                 break;
             case 2:
-                $(".round-right-top").css("background-color", "#ff6666");
                 sound_2.play();
-                setTimeout(reset_colors, 500);
+                $(".round-right-top").css("background-color", "#ff6666");
+                setTimeout(reset_colors, tempo);
                 break;
             case 3:
-                $(".round-right-bottom").css("background-color", "#6666ff");
                 sound_3.play();
-                setTimeout(reset_colors, 500);
+                $(".round-right-bottom").css("background-color", "#6666ff");
+                setTimeout(reset_colors, tempo);
             default:
                 break;
         }
     }
     
     function setting_timeouts() {
+        
+        if (count >= 5 && count < 9) {
+            tempo_1 = 850;
+        }
+        
+        else if (count >= 9 && count < 13) {
+            tempo_1 = 700;
+        }
+        
+        else if (count >= 13) {
+            tempo_1 = 550;
+        }
+        
         for (i = 0; i < count; i++) {
-            setTimeout(random_color, i*1000);
+            setTimeout(random_color, i*tempo_1);
         }
     }
     
     function replay_timeouts() {
         $("#current-count").text(count);
+        
+        if (count >= 5 && count < 9) {
+            tempo_1 = 850;
+        }
+        
+        else if (count >= 9 && count < 13) {
+            tempo_1 = 700;
+        }
+        
+        else if (count >= 13) {
+            tempo_2 = 550;
+        }
+        
         for (j = 0; j < game_presses.length; j++) {
-            setTimeout(each_color_timeouts.bind(null,j), j*1000);
+            setTimeout(each_color_timeouts.bind(null,j), j*tempo_1);
         }
     }       
             
     function each_color_timeouts(j) {
         console.log("this is game_presses[j]", game_presses[j]);
+        
+        if (count >= 5 && count < 9) {
+            tempo = 450;
+        }
+        else if (count >= 9 && count < 13) {
+            tempo = 400;
+        }
+        else if (count >= 13) {
+            tempo = 300;
+        }
+        
         switch (game_presses[j]) {
             case 0:
-                $(".round-left-top").css("background-color", "#b3ffb3");
                 sound_0.play();
-                setTimeout(reset_colors, 500);
+                $(".round-left-top").css("background-color", "#b3ffb3");
+                setTimeout(reset_colors, tempo);
                 break;
             case 1:
-                $(".round-left-bottom").css("background-color", "#ffffb3");
                 sound_1.play();
-                setTimeout(reset_colors, 500);
+                $(".round-left-bottom").css("background-color", "#ffffb3");
+                setTimeout(reset_colors, tempo);
                 break;
             case 2:
-                $(".round-right-top").css("background-color", "#ff6666");
                 sound_2.play();
-                setTimeout(reset_colors, 500);
+                $(".round-right-top").css("background-color", "#ff6666");
+                setTimeout(reset_colors, tempo);
                 break;
             case 3:
-                $(".round-right-bottom").css("background-color", "#6666ff");
                 sound_3.play();
-                setTimeout(reset_colors, 500);
+                $(".round-right-bottom").css("background-color", "#6666ff");
+                setTimeout(reset_colors, tempo);
             default:
                 break;
         }

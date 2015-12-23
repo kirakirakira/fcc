@@ -3,11 +3,14 @@ $(document).ready(function() {
     var device_status = false;
     var count = 1;
     var color_array = [".round-left-top", ".round-left-bottom", ".round-right-top", ".round-right-bottom"];
-    var keep_playing = true;
     var game_presses;
     var button_presses;
     var strict_mode = false;
     var game_start = false;
+    var sound_0 = new Audio("https://s3.amazonaws.com/freecodecamp/simonSound1.mp3");
+    var sound_1 = new Audio("https://s3.amazonaws.com/freecodecamp/simonSound2.mp3");
+    var sound_2 = new Audio("https://s3.amazonaws.com/freecodecamp/simonSound3.mp3");
+    var sound_3 = new Audio("https://s3.amazonaws.com/freecodecamp/simonSound4.mp3");
     
     window.timeoutList = new Array();
     window.intervalList = new Array();
@@ -63,11 +66,15 @@ $(document).ready(function() {
     
     $("#start-button").click(function() {
         $("#start-button").css("background-color", "lightgreen");
-        game_start = true;
-        $("#current-count").text(count);
-        setting_timeouts();
-        //setTimeout(check_presses, count*2000);
+        start_the_game();
     })
+    
+    function start_the_game() {
+        count = 1;
+        $("#current-count").text(count);
+        game_start = true;
+        setting_timeouts();
+    }
          
     $("#OFF-toggle").click(function() {
         $("#ON-toggle").css("visibility", "visible");
@@ -94,7 +101,6 @@ $(document).ready(function() {
         clearAllTimeouts();
         // reset count back to 1
         count = 1;
-
     });
     
     function reset_colors() {
@@ -107,6 +113,7 @@ $(document).ready(function() {
     $(".round-left-top").click(function() {
         if (device_status && game_start) {
             $(this).css("background-color", "#b3ffb3");
+            sound_0.play();
             setTimeout(reset_colors, 500);
             button_presses.push(0);
             console.log(button_presses);
@@ -120,6 +127,7 @@ $(document).ready(function() {
     $(".round-left-bottom").click(function() {
         if (device_status && game_start) {
             $(this).css("background-color", "#ffffb3");
+            sound_1.play();
             setTimeout(reset_colors, 500);
             button_presses.push(1);
             console.log(button_presses);
@@ -133,6 +141,7 @@ $(document).ready(function() {
     $(".round-right-top").click(function() {
         if (device_status && game_start) {
             $(this).css("background-color", "#ff6666");
+            sound_2.play();
             setTimeout(reset_colors, 500);
             button_presses.push(2);
             console.log(button_presses);
@@ -146,6 +155,7 @@ $(document).ready(function() {
     $(".round-right-bottom").click(function() {
         if (device_status && game_start) {
             $(this).css("background-color", "#6666ff");
+            sound_3.play();
             setTimeout(reset_colors, 500);
             button_presses.push(3);
             console.log(button_presses);
@@ -167,18 +177,22 @@ $(document).ready(function() {
         switch (random_color) {
             case 0:
                 $(".round-left-top").css("background-color", "#b3ffb3");
+                sound_0.play();
                 setTimeout(reset_colors, 500);
                 break;
             case 1:
                 $(".round-left-bottom").css("background-color", "#ffffb3");
+                sound_1.play();
                 setTimeout(reset_colors, 500);
                 break;
             case 2:
                 $(".round-right-top").css("background-color", "#ff6666");
+                sound_2.play();
                 setTimeout(reset_colors, 500);
                 break;
             case 3:
                 $(".round-right-bottom").css("background-color", "#6666ff");
+                sound_3.play();
                 setTimeout(reset_colors, 500);
             default:
                 break;
@@ -192,6 +206,7 @@ $(document).ready(function() {
     }
     
     function replay_timeouts() {
+        $("#current-count").text(count);
         for (j = 0; j < game_presses.length; j++) {
             setTimeout(each_color_timeouts.bind(null,j), j*1000);
         }
@@ -202,18 +217,22 @@ $(document).ready(function() {
         switch (game_presses[j]) {
             case 0:
                 $(".round-left-top").css("background-color", "#b3ffb3");
+                sound_0.play();
                 setTimeout(reset_colors, 500);
                 break;
             case 1:
                 $(".round-left-bottom").css("background-color", "#ffffb3");
+                sound_1.play();
                 setTimeout(reset_colors, 500);
                 break;
             case 2:
                 $(".round-right-top").css("background-color", "#ff6666");
+                sound_2.play();
                 setTimeout(reset_colors, 500);
                 break;
             case 3:
                 $(".round-right-bottom").css("background-color", "#6666ff");
+                sound_3.play();
                 setTimeout(reset_colors, 500);
             default:
                 break;
@@ -222,29 +241,69 @@ $(document).ready(function() {
     
     function check_presses() {
         if (game_presses.length !== button_presses.length) {
-            console.log("you lose");
-            keep_playing = false;
+            console.log("you got that last sequence wrong");
+            
+            if (strict_mode) {
+                alert("Sorry you lost!");
+                // restart the game at count = 1
+                start_the_game();
+            }
+            
+            else {
+                $("#current-count").text("!!!");
+                // reset the player's button presses back to nothing
+                button_presses = [];
+                reset_colors();
+                // repeat the last steps so they can try again
+                setTimeout(replay_timeouts, 500);
+            }
+            
             return false;
         }
         for (var i = game_presses.length; i > 0; i--) {
             if (game_presses[i] !== button_presses[i]) {
-                console.log("you lose");
-                keep_playing = false;
+                console.log("you got that last sequence wrong");
+                if (strict_mode) {
+                    alert("Sorry you lost!");
+                    // restart the game at count = 1
+                    start_the_game();
+                }
+
+                else {
+                    $("#current-count").text("!!!");
+                    // reset the player's button presses back to nothing
+                    button_presses = [];
+                    reset_colors();
+                    // repeat the last steps so they can try again
+                    setTimeout(replay_timeouts, 500);
+                }
                 return false;
             }
         }
         
-        console.log("you win");
-        // reset the player's button presses back to nothing
-        button_presses = [];
-        // increase count by 1, and add a new random color to the game press and then continue
-        reset_colors();
-        count += 1;
-        $("#current-count").text(count);
-        game_presses.push(Math.floor((Math.random() * 4)));
-        // this replays the last sequence plus the new one once the player repeats it correctly
-        setTimeout(replay_timeouts,500);
-        return true;
+        console.log("you got that last sequence correct, let's see how you did");
+        
+        // once you reach 20 steps, you win the game! game will restart at count = 1
+        if (count === 20) {
+            alert("Congratulations! You've won the game!");
+            game_presses = [];
+            button_presses = [];
+            reset_colors();
+            start_the_game();
+        }
+        
+        // if not, keep going!
+        else {
+            // reset the player's button presses back to nothing
+            button_presses = [];
+            // increase count by 1, and add a new random color to the game press and then continue
+            reset_colors();
+            count += 1;
+            $("#current-count").text(count);
+            game_presses.push(Math.floor((Math.random() * 4)));
+            // this replays the last sequence plus the new one that was added in the previous step
+            setTimeout(replay_timeouts, 500);
+            return true;
+        }
     }
-    
 });

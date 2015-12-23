@@ -183,3 +183,13 @@ body {
     left: 102px;
     top: 173px;
 }
+
+#current-count {
+    font-family: 'Roboto Slab', serif;
+    font-weight: 700;
+    font-size: 19px;
+    color: white;
+    position: relative;
+    left: 20px;
+    top: -10px;
+}

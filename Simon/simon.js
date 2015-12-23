@@ -6,6 +6,8 @@ $(document).ready(function() {
     var keep_playing = true;
     var game_presses;
     var button_presses;
+    var strict_mode = false;
+    var game_start = false;
     
     window.timeoutList = new Array();
     window.intervalList = new Array();
@@ -53,25 +55,40 @@ $(document).ready(function() {
         }
         window.intervalList = new Array();
     };
+    
+    $("#strict-button").click(function() {
+        $("#strict-button").css("background-color", "lightgreen");
+        strict_mode = true;
+    })
+    
+    $("#start-button").click(function() {
+        $("#start-button").css("background-color", "lightgreen");
+        game_start = true;
+        $("#current-count").text(count);
+        setting_timeouts();
+        setTimeout(check_presses, count*2000);
+    })
          
     $("#OFF-toggle").click(function() {
         $("#ON-toggle").css("visibility", "visible");
         $("#OFF-toggle").css("visibility", "hidden");
         game_presses = [];
         button_presses = [];
-        $("#current-count").text(count);
         device_status = true;
         console.log("it's on!");
         reset_colors();
-        setting_timeouts();
-        setTimeout(check_presses, count*2000);
     });
     
     $("#ON-toggle").click(function() {
         $("#OFF-toggle").css("visibility", "visible");
         $("#ON-toggle").css("visibility", "hidden");
+        $("#start-button").css("background-color", "red");
+        game_start = false;
+        $("#strict-button").css("background-color", "yellow");
+        strict_mode = false;
         device_status = false;
         console.log("it's off!");
+        $("#current-count").text("");
         reset_colors();
         // need to clear timeouts
         clearAllTimeouts();
@@ -88,7 +105,7 @@ $(document).ready(function() {
     }
     
     $(".round-left-top").click(function() {
-        if (device_status) {
+        if (device_status && game_start) {
             $(this).css("background-color", "#b3ffb3");
             setTimeout(reset_colors, 500);
             button_presses.push(0);
@@ -97,7 +114,7 @@ $(document).ready(function() {
     });
      
     $(".round-left-bottom").click(function() {
-        if (device_status) {
+        if (device_status && game_start) {
             $(this).css("background-color", "#ffffb3");
             setTimeout(reset_colors, 500);
             button_presses.push(1);
@@ -106,7 +123,7 @@ $(document).ready(function() {
     });
     
     $(".round-right-top").click(function() {
-        if (device_status) {
+        if (device_status && game_start) {
             $(this).css("background-color", "#ff6666");
             setTimeout(reset_colors, 500);
             button_presses.push(2);
@@ -115,7 +132,7 @@ $(document).ready(function() {
     });
     
     $(".round-right-bottom").click(function() {
-        if (device_status) {
+        if (device_status && game_start) {
             $(this).css("background-color", "#6666ff");
             setTimeout(reset_colors, 500);
             button_presses.push(3);
@@ -200,11 +217,11 @@ $(document).ready(function() {
                 return false;
             }
         }
-        alert("you win");
         
+        alert("you win");
         // reset the player's button presses back to nothing
         button_presses = [];
-        // need to increase count by 1, and add a new random color to the game press and then continue
+        // increase count by 1, and add a new random color to the game press and then continue
         count += 1;
         $("#current-count").text(count);
         game_presses.push(Math.floor((Math.random() * 4)));
@@ -212,7 +229,6 @@ $(document).ready(function() {
         // this replays the last sequence plus the new one once the player repeats it correctly
         replay_timeouts();
         // this goes and checks the presses again to see if they're still a winner
-        // need to reset the button presses somewhere too
         setTimeout(check_presses, count*3000);
         return true;
     }

@@ -1,22 +1,70 @@
 $(document).ready(function() {
     
     var device_status = false;
-    var count = 4;
+    var count = 1;
     var color_array = [".round-left-top", ".round-left-bottom", ".round-right-top", ".round-right-bottom"];
     var keep_playing = true;
     var game_presses;
     var button_presses;
     
+    window.timeoutList = new Array();
+    window.intervalList = new Array();
+
+    window.oldSetTimeout = window.setTimeout;
+    window.oldSetInterval = window.setInterval;
+    window.oldClearTimeout = window.clearTimeout;
+    window.oldClearInterval = window.clearInterval;
+
+    window.setTimeout = function(code, delay) {
+        var retval = window.oldSetTimeout(code, delay);
+        window.timeoutList.push(retval);
+        return retval;
+    };
+    window.clearTimeout = function(id) {
+        var ind = window.timeoutList.indexOf(id);
+        if(ind >= 0) {
+            window.timeoutList.splice(ind, 1);
+        }
+        var retval = window.oldClearTimeout(id);
+        return retval;
+    };
+    window.setInterval = function(code, delay) {
+        var retval = window.oldSetInterval(code, delay);
+        window.intervalList.push(retval);
+        return retval;
+    };
+    window.clearInterval = function(id) {
+        var ind = window.intervalList.indexOf(id);
+        if(ind >= 0) {
+            window.intervalList.splice(ind, 1);
+        }
+        var retval = window.oldClearInterval(id);
+        return retval;
+    };
+    window.clearAllTimeouts = function() {
+        for(var i in window.timeoutList) {
+            window.oldClearTimeout(window.timeoutList[i]);
+        }
+        window.timeoutList = new Array();
+    };
+    window.clearAllIntervals = function() {
+        for(var i in window.intervalList) {
+            window.oldClearInterval(window.intervalList[i]);
+        }
+        window.intervalList = new Array();
+    };
+         
     $("#OFF-toggle").click(function() {
         $("#ON-toggle").css("visibility", "visible");
         $("#OFF-toggle").css("visibility", "hidden");
         game_presses = [];
         button_presses = [];
+        $("#current-count").text(count);
         device_status = true;
         console.log("it's on!");
         reset_colors();
         setting_timeouts();
-        setTimeout(check_presses, count*3000);
+        setTimeout(check_presses, count*2000);
     });
     
     $("#ON-toggle").click(function() {
@@ -25,6 +73,11 @@ $(document).ready(function() {
         device_status = false;
         console.log("it's off!");
         reset_colors();
+        // need to clear timeouts
+        clearAllTimeouts();
+        // reset count back to 1
+        count = 1;
+
     });
     
     function reset_colors() {
@@ -148,10 +201,15 @@ $(document).ready(function() {
             }
         }
         alert("you win");
+        
+        // reset the player's button presses back to nothing
+        button_presses = [];
         // need to increase count by 1, and add a new random color to the game press and then continue
-        //count += 1;
+        count += 1;
+        $("#current-count").text(count);
+        game_presses.push(Math.floor((Math.random() * 4)));
         reset_colors();
-        // this replays the last sequence once the player repeats it correctly
+        // this replays the last sequence plus the new one once the player repeats it correctly
         replay_timeouts();
         // this goes and checks the presses again to see if they're still a winner
         // need to reset the button presses somewhere too
